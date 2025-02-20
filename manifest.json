@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "name": "Selective User Agent Switcher",
+  "version": "1.0",
+  "description": "Switches user agents for specific websites.",
+  "permissions": [
+    "webRequest",
+    "webRequestBlocking",
+    "storage"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  }
+}
