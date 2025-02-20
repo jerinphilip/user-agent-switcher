@@ -1,4 +1,4 @@
-// options.js
+// options.js (Manifest V2)
 
 const siteInput = document.getElementById('siteInput');
 const userAgentInput = document.getElementById('userAgentInput');
@@ -6,7 +6,7 @@ const addButton = document.getElementById('addButton');
 const userAgentsList = document.getElementById('userAgentsList');
 
 function loadUserAgents() {
-  browser.storage.sync.get('userAgents').then(result => {
+  browser.storage.sync.get('userAgents', (result) => {
     const userAgents = result.userAgents || {};
     userAgentsList.innerHTML = '';
     for (const site in userAgents) {
@@ -16,8 +16,7 @@ function loadUserAgents() {
       deleteButton.textContent = 'Delete';
       deleteButton.addEventListener('click', () => {
         delete userAgents[site];
-        browser.storage.sync.set({userAgents : userAgents})
-            .then(loadUserAgents);
+        browser.storage.sync.set({userAgents : userAgents}, loadUserAgents);
       });
       item.appendChild(deleteButton);
       userAgentsList.appendChild(item);
@@ -31,10 +30,10 @@ addButton.addEventListener('click', () => {
   const site = siteInput.value.trim();
   const userAgent = userAgentInput.value.trim();
   if (site && userAgent) {
-    browser.storage.sync.get('userAgents').then(result => {
+    browser.storage.sync.get('userAgents', (result) => {
       const userAgents = result.userAgents || {};
       userAgents[site] = userAgent;
-      browser.storage.sync.set({userAgents : userAgents}).then(loadUserAgents);
+      browser.storage.sync.set({userAgents : userAgents}, loadUserAgents);
       siteInput.value = '';
       userAgentInput.value = '';
     });

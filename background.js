@@ -1,17 +1,15 @@
-// background.js
+// background.js (Manifest V2)
 
-const userAgents = {}; // Store site-specific user agents
+const userAgents = {};
 
-// Load stored user agents on startup
-browser.storage.sync.get('userAgents').then(result => {
+browser.storage.sync.get('userAgents', (result) => {
   if (result.userAgents) {
     Object.assign(userAgents, result.userAgents);
   }
 });
 
-// Listen for changes to stored user agents
-browser.storage.onChanged.addListener(changes => {
-  if (changes.userAgents) {
+browser.storage.onChanged.addListener((changes, areaName) => {
+  if (areaName === 'sync' && changes.userAgents) {
     Object.assign(userAgents, changes.userAgents.newValue);
   }
 });

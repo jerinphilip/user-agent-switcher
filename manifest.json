@@ -1,5 +1,5 @@
 {
-  "manifest_version": 3,
+  "manifest_version": 2,
   "name": "Selective User Agent Switcher",
   "version": "1.0",
   "description": "Switches user agents for specific websites.",
@@ -9,10 +9,7 @@
     "storage"
   ],
   "background": {
-    "service_worker": "background.js"
+    "scripts": ["background.js"]
   },
-  "options_ui": {
-    "page": "options.html",
-    "open_in_tab": true
-  }
+  "options_page": "options.html"
 }
