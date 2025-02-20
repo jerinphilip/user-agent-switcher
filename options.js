@@ -136,13 +136,13 @@ const siteInput = document.getElementById('siteInput');
 const ruleAdd = document.getElementById('ruleAdd');
 ruleAdd.addEventListener('click', () => {
   const site = siteInput.value.trim();
-  const label = userAgentLabelAdd.value.trim();
+  const label = userAgentLabelRule.value.trim();
   if (site && label) {
-    browser.storage.sync.get('intercepts', (result) => {
+    browser.storage.sync.get(CONFIG_KEY, (result) => {
       const intercepts = result[CONFIG_KEY].intercepts;
-      const defer = result[CONFIG_KEY].defer;
+      const deref = result[CONFIG_KEY].deref;
       intercepts[site] = label;
-      const payload = Config(intercepts, defer);
+      const payload = Config(intercepts, deref);
 
       browser.storage.sync.set(payload, loadUserAgents);
       siteInput.value = '';
