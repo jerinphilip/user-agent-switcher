@@ -2,9 +2,9 @@
 
 const SEED = {
   intercepts : {
-    "web.whatsapp.com" : "ff-android/135",
-    "www.supermonitoring.com" : "ff/135",
-    "www.whatismybrowser.com" : "ff/135"
+    "web.whatsapp.com" : "ff/135",
+    "www.supermonitoring.com" : "ff-android/135",
+    "www.whatismybrowser.com" : "ff-android/135"
   },
 
   deref : {
@@ -63,7 +63,7 @@ function render(site, config) {
   rhs.classList.add("col-5");
 
   const label = document.createElement("a");
-  label.setAttribute("href", site);
+  label.setAttribute("href", 'http://' + site);
   label.innerHTML = site;
 
   const tag = document.createElement("span");
