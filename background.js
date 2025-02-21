@@ -23,13 +23,11 @@ browser.storage.onChanged.addListener((changes, areaName) => {
 const changeUserAgent = function(details) {
   const url = new URL(details.url);
   const hostname = url.hostname;
-  console.log("onBeforeSendHeaders");
-
   console.log("onBeforeSendHeaders - URL:", details.url);
-  console.log("Original Headers:", details.requestHeaders);
   const intercepts = config.intercepts;
   const deref = config.deref;
 
+  console.log("hostname: ", hostname);
   const label = intercepts[hostname];
   if (label) {
     const userAgent = deref[label];

@@ -6,9 +6,9 @@ const SEED_USER_AGENTS = {
 };
 
 const WEBSITES_TO_UA = {
-  "https://web.whatsapp.com" : "ff/135",
-  "https://www.supermonitoring.com" : "ff/135",
-  "https://www.whatismybrowser.com/" : "ff/135"
+  "web.whatsapp.com" : "ff/135",
+  "www.supermonitoring.com" : "ff/135",
+  "www.whatismybrowser.com" : "ff/135"
 };
 
 const CONFIG_KEY = 'ua_switcher_config';
