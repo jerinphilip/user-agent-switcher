@@ -2,14 +2,16 @@
 
 const SEED = {
   intercepts : {
-    "web.whatsapp.com" : "ff/135",
+    "web.whatsapp.com" : "ff-android/135",
     "www.supermonitoring.com" : "ff/135",
     "www.whatismybrowser.com" : "ff/135"
   },
 
   deref : {
     "ff/135" :
-        "Mozilla/5.0 (X11; Linux i686; rv:135.0) Gecko/20100101 Firefox/135.0"
+        "Mozilla/5.0 (X11; Linux i686; rv:135.0) Gecko/20100101 Firefox/135.0",
+    "ff-android/135" :
+        "Mozilla/5.0 (Android 15; Mobile; rv:135.0) Gecko/135.0 Firefox/135.0"
   }
 };
 
@@ -28,6 +30,11 @@ function Config(intercepts, deref) {
 const debug = {
   success : function(item) { console.log("display:", item); },
   error : function(error) { console.log("error:", error); }
+};
+
+function restoreDefaults() {
+  const config = Config(SEED.intercepts, SEED.deref);
+  browser.storage.sync.set(config).then(debug.success, debug.error);
 }
 
 // On first run, ensure the values are added.
@@ -35,8 +42,7 @@ const debug = {
 function firstRun(item) {
   debug.success("firstRun item:", item);
   if (item.intercepts != null) {
-    const config = Config(SEED.intercepts, SEED.deref);
-    browser.storage.sync.set(config).then(debug.success, debug.error);
+    restoreDefaults();
   }
 };
 
@@ -60,13 +66,18 @@ function render(site, config) {
   label.setAttribute("href", site);
   label.innerHTML = site;
 
+  const tag = document.createElement("span");
+  tag.classList.add("badge");
+  tag.classList.add("badge-light");
+  tag.innerHTML = ' ' + userAgentRef;
+
   const pre = document.createElement("pre");
   pre.innerHTML = userAgent;
   pre.style.display = 'none';
 
   const ref = document.createElement("button");
   ref.classList.add("button-primary");
-  ref.textContent = userAgentRef;
+  ref.textContent = "Expand";
   ref.addEventListener('click', () => {
     const before = pre.style.display;
     const after = (before == 'none') ? 'block' : 'none';
@@ -85,6 +96,7 @@ function render(site, config) {
   });
 
   lhs.appendChild(label);
+  lhs.append(tag);
   lhs.appendChild(pre);
 
   rhs.appendChild(ref);
@@ -160,4 +172,10 @@ ruleAdd.addEventListener('click', () => {
       userAgentLabelRule.value = '';
     });
   }
+});
+
+const restoreDefaultsButton = document.getElementById("restoreDefaults");
+restoreDefaultsButton.addEventListener('click', function() {
+  restoreDefaults();
+  loadUserAgents();
 });
