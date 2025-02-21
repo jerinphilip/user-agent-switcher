@@ -1,14 +1,16 @@
 // options.js (Manifest V2)
 
-const SEED_USER_AGENTS = {
-  "ff/135" :
-      "Mozilla/5.0 (X11; Linux i686; rv:135.0) Gecko/20100101 Firefox/135.0"
-};
+const SEED = {
+  intercepts : {
+    "web.whatsapp.com" : "ff/135",
+    "www.supermonitoring.com" : "ff/135",
+    "www.whatismybrowser.com" : "ff/135"
+  },
 
-const WEBSITES_TO_UA = {
-  "web.whatsapp.com" : "ff/135",
-  "www.supermonitoring.com" : "ff/135",
-  "www.whatismybrowser.com" : "ff/135"
+  deref : {
+    "ff/135" :
+        "Mozilla/5.0 (X11; Linux i686; rv:135.0) Gecko/20100101 Firefox/135.0"
+  }
 };
 
 const CONFIG_KEY = 'ua_switcher_config';
@@ -23,12 +25,22 @@ function Config(intercepts, deref) {
   return config;
 }
 
-function display(item) { console.log("display", item) }
-function onError(error) { console.log("error: ", error); }
+const debug = {
+  success : function(item) { console.log("display:", item); },
+  error : function(error) { console.log("error:", error); }
+}
 
-const config = Config(WEBSITES_TO_UA, SEED_USER_AGENTS);
-browser.storage.sync.set(config).then(display, onError);
-browser.storage.sync.get(CONFIG_KEY).then(display, onError);
+// On first run, ensure the values are added.
+// No need if instantiated.
+function firstRun(item) {
+  debug.success("firstRun item:", item);
+  if (item.intercepts != null) {
+    const config = Config(SEED.intercepts, SEED.deref);
+    browser.storage.sync.set(config).then(debug.success, debug.error);
+  }
+};
+
+browser.storage.sync.get(CONFIG_KEY).then(firstRun, debug.error);
 
 function render(site, config) {
   console.log(config);
@@ -130,7 +142,6 @@ userAgentAdd.addEventListener('click', () => {
   }
 });
 
-// Form rule
 const userAgentLabelRule = document.getElementById('userAgentLabelRule');
 const siteInput = document.getElementById('siteInput');
 const ruleAdd = document.getElementById('ruleAdd');
